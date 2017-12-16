@@ -14,7 +14,7 @@ const userSchema = new Schema(
 		},
 		email:{
 			type: String,
-			required: [true, "Password required."]
+			required: [true, "Email required."]
 		},
 		idcareer:[{
 			type: Schema.Types.Mixed,

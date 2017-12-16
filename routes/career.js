@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
 
 const Career = require('../models/career');
 
@@ -38,6 +39,23 @@ router.post('/createcareer', (req, res, next) => {
       id: newCareer._id
     });
   });
+});
+
+/* GET a single Career. */
+router.get('/getsinglecareer/:id', (req, res) => {
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400).json({ message: 'Specified id is not valid' });
+    return;
+  }
+
+  Career.findById(req.params.id, (err, NewCareer) => {
+      if (err) {
+        res.json(err);
+        return;
+      }
+
+      res.json(NewCareer);
+    });
 });
 
 module.exports = router;

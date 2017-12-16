@@ -8,11 +8,9 @@ const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
 const moment        = require('moment');
 
-mongoose.connect('mongodb://localhost:27017/cyber-cheetah');
-
-
-
 const app = express();
+
+require('./config/database');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

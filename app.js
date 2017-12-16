@@ -8,9 +8,13 @@ const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
 const moment        = require('moment');
 
-const app = express();
+const index = require('./routes/index');
+const career = require('./routes/career');
 
 require('./config/database');
+
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,8 +32,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
 
-const index = require('./routes/index');
+
 app.use('/', index);
+app.use('/api/career', career);
+
+
+
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

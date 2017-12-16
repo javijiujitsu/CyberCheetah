@@ -19,7 +19,7 @@ const userSchema = new Schema(
 		idcareer:[{
 			type: Schema.Types.Mixed,
       id: String,
-      date: String,
+      date: Date, default: new Date(),
 			required: true
 		}],
     idtask:[{

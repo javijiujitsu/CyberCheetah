@@ -17,8 +17,10 @@ const userSchema = new Schema(
 			required: [true, "Email required."]
 		},
 		idcareer:[{
-			type: Schema.Types.Mixed,
-      id: String,
+			type: Schema.Types.ObjectId,
+      required: true
+    },
+    {
       date: Date, default: new Date(),
 			required: true
 		}],

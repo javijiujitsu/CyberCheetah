@@ -22,7 +22,6 @@ const careerSchema = new Schema(
 		},
     idtask:[{
       type: Schema.Types.ObjectId,
-			id: String,
 		}],
 
 	},

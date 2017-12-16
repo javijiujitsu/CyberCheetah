@@ -17,7 +17,6 @@ const taskSchema = new Schema(
     resource:{
 			type: String,
 		},
-
 	},
 	{
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" }

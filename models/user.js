@@ -21,14 +21,13 @@ const userSchema = new Schema(
       required: true
     },
     {
-      date: Date, default: new Date(),
+      date: Date,
+      default: new Date(),
 			required: true
 		}],
     idtask:[{
       type: Schema.Types.ObjectId,
-			id: String,
 		}],
-
 	},
 	{
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" }

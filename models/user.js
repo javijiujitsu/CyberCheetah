@@ -15,16 +15,16 @@ const userSchema = new Schema(
 		email:{
 			type: String,
 			required: [true, "Password required."]
-
 		},
 		idcareer:[{
-			type: Number,
-			min: 0,
-			max: 5
+			type: Schema.Types.Mixed,
+      id: String,
+      date: String,
+			required: true
 		}],
-		idtask:[{
-			name: String,
-			year: String
+    idtask:[{
+      type: Schema.Types.ObjectId,
+			id: String,
 		}],
 
 	},

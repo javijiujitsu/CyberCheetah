@@ -58,4 +58,53 @@ router.get('/getsinglecareer/:id', (req, res) => {
     });
 });
 
+/* Edti Career */
+
+router.put('/editcareer/:id', (req, res) => {
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400).json({ message: 'Specified id is not valid' });
+    return;
+  }
+
+  const updates = {
+    name: req.body.name,
+    description: req.body.description,
+    universities: req.body.universities,
+    certification: req.body.certification,
+    resource: req.body.resource,
+    idtask: req.body.idtask
+  };
+
+  Career.findByIdAndUpdate(req.params.id, updates, (err) => {
+    if (err) {
+      res.json(err);
+      return;
+    }
+
+    res.json({
+      message: 'Career updated successfully'
+    });
+  });
+});
+
+/* DELETE a career. */
+router.delete('/deletecareer/:id', (req, res) => {
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400).json({ message: 'Specified id is not valid' });
+    return;
+  }
+
+  Career.remove({ _id: req.params.id }, (err) => {
+    if (err) {
+      res.json(err);
+      return;
+    }
+
+    return res.json({
+      message: 'Career has been removed!'
+    });
+  });
+});
+
+
 module.exports = router;

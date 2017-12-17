@@ -6,8 +6,10 @@ const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
-const moment        = require('moment');
+const moment       = require('moment');
+const cors         = require('cors');
 
+//Routes
 const index = require('./routes/index');
 const career = require('./routes/career');
 
@@ -31,6 +33,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
+app.use(cors());
 
 
 app.use('/', index);

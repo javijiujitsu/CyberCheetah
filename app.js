@@ -20,6 +20,7 @@ const auth = require('./routes/auth');
 
 
 require('./config/database');
+require ('./config/passport');
 
 
 const app = express();

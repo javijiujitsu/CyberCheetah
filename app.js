@@ -6,12 +6,16 @@ const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
+const bcrypt       = require('bcrypt');
 const moment       = require('moment');
 const cors         = require('cors');
 
 //Routes
 const index = require('./routes/index');
 const career = require('./routes/career');
+const auth = require('./routes/auth');
+
+
 
 require('./config/database');
 
@@ -38,7 +42,7 @@ app.use(cors());
 
 app.use('/', index);
 app.use('/api/career', career);
-
+app.use('/auth',auth);
 
 
 

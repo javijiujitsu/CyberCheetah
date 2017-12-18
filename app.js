@@ -41,6 +41,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
 app.use(cors());
 
+app.use(
+	session({
+		secret: "cybercheetahdev",
+		resave: true,
+		saveUninitialized: true
+	})
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 

@@ -7,6 +7,8 @@ const bodyParser   = require('body-parser');
 const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
 const bcrypt       = require('bcrypt');
+const passport     = require('passport');
+const session      = require('express-session');
 const moment       = require('moment');
 const cors         = require('cors');
 
@@ -40,6 +42,10 @@ app.use(layouts);
 app.use(cors());
 
 
+
+
+
+// Route calls
 app.use('/', index);
 app.use('/api/career', career);
 app.use('/auth',auth);

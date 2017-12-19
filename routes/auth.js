@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 const User = require('../models/user');
 const { ensureLoggedIn, ensureLoggedOut } = require('connect-ensure-login');
 
+//Sign up Post
 router.post('/process-signup', (req, res, next) => {
   if (!req.body.signupUsername || !req.body.signupPassword) {
     res.status(400).json({
@@ -62,6 +63,45 @@ router.post('/process-signup', (req, res, next) => {
   );
 });
 
+//logout post
+router.post("/process-login", (req, res, next) => {
+  const customAuthCallback = passport.authenticate(("local"), (err, theUser, extraInfo) => {
+    if (err) {
+			console.log(err, theUser, extraInfo);
+      res.status(500).json({errorMesage: "login failed sorry"});
+      return;
+    }
+    if (!theUser) {
+      res.status(401).json({
+        errorMesage: extraInfo.message
+      });
+      return;
+    }
+    req.login(theUser, (err) => {
+      if (err) {
+        res.status(500).json({
+          errorMessage: "login failed"
+        });
+      }
+
+      //clear out the password for security
+      theUser.password = undefined;
+			console.log("process login route", req.user)
+      res.status(200).json(theUser);
+
+    });
+  });
+  customAuthCallback(req, res, next);
+});
+
+// Logout
+
+router.delete("/logout", (req, res, next) => {
+  req.logout();
+  res.status(200).json({
+    successMessage: "Log out success!"
+  });
+});
 
 
 

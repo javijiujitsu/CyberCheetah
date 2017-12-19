@@ -42,7 +42,7 @@ router.post('/process-signup', (req, res, next) => {
 
       theUser.save((err) => {
         if (err) {
-          console.log("User save error: ", err)
+          console.log("User save error: ", err);
           res.status(500).json({errorMessage: "Error saving user."});
           return;
         }
@@ -86,7 +86,7 @@ router.post("/process-login", (req, res, next) => {
 
       //clear out the password for security
       theUser.password = undefined;
-			console.log("process login route", req.user)
+			console.log("process login route", req.user);
       res.status(200).json(theUser);
 
     });

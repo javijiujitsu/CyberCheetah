@@ -25,7 +25,7 @@ router.post('/createcareer', (req, res, next) => {
     certification: req.body.certification,
     resource: req.body.resource,
     idtask: req.body.idtask
-    //ID task is being converting to a string
+    //ID task is being converted to a string
 
   });
 

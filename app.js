@@ -13,10 +13,11 @@ const moment       = require('moment');
 const cors         = require('cors');
 
 //Routes
-const index = require('./routes/index');
-const career = require('./routes/career');
-const auth = require('./routes/auth');
-const task = require('./routes/task');
+const index   = require('./routes/index');
+const career  = require('./routes/career');
+const auth    = require('./routes/auth');
+const task    = require('./routes/task');
+const user    = require('./routes/user');
 
 
 require('./config/database');
@@ -65,6 +66,8 @@ app.use('/', index);
 app.use('/api/career', career);
 app.use('/auth',auth);
 app.use('/task',task);
+app.use('/user',user);
+
 
 
 

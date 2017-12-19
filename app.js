@@ -16,7 +16,7 @@ const cors         = require('cors');
 const index = require('./routes/index');
 const career = require('./routes/career');
 const auth = require('./routes/auth');
-
+const task = require('./routes/task');
 
 
 require('./config/database');
@@ -64,6 +64,7 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/api/career', career);
 app.use('/auth',auth);
+app.use('/task',task);
 
 
 

@@ -103,16 +103,18 @@ router.delete("/logout", (req, res, next) => {
   });
 });
 
+// check if user is still logged in
 
-
-
-
-
-
-
-
-
-
-
+router.get("/checklogin", (req, res, next) => {
+  let amILoggedIn = false;
+  if (req.user) {
+    req.user.encryptedPassword = undefined;
+    amILoggedIn = true;
+  }
+  res.status(200).json({
+    isLoggedIn: amILoggedIn,
+    userInfo: req.user
+  });
+});
 
 module.exports = router;

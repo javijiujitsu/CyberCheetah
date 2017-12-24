@@ -9,14 +9,14 @@ const User = require('../models/user');
 const { ensureLoggedIn, ensureLoggedOut } = require('connect-ensure-login');
 
 router.post('/api/signup', (req, res, next) => {
-    if (!req.body.signupEmail || !req.body.signupPassword) {
+    if (!req.body.email || !req.body.password) {
         // 400 for client errors (user needs to fix something)
         res.status(400).json({ message: 'Need both email and password' });
         return;
     }
 
-      User.findOne(
-      { email: req.body.signupEmail },
+    User.findOne(
+      { email: req.body.email },
       (err, userFromDb) => {
           if (err) {
             // 500 for server errors (nothing user can do)
@@ -31,12 +31,12 @@ router.post('/api/signup', (req, res, next) => {
           }
 
           const salt = bcrypt.genSaltSync(10);
-          const scrambledPassword = bcrypt.hashSync(req.body.signupPassword, salt);
+          const scrambledPassword = bcrypt.hashSync(req.body.password, salt);
 
-          const theUser = new User({
-            fullName: req.body.signupFullName,
-            email: req.body.signupEmail,
-            encryptedPassword: scrambledPassword
+          const theUser = new User ({
+            username: req.body.username,
+            email: req.body.email,
+            password: scrambledPassword
           });
 
           theUser.save((err) => {
@@ -55,7 +55,7 @@ router.post('/api/signup', (req, res, next) => {
 
                   // Clear the encryptedPassword before sending
                   // (not from the database, just from the object)
-                  theUser.encryptedPassword = undefined;
+                  theUser.password = undefined;
 
                   // Send the user's information to the frontend
                   res.status(200).json(theUser);
@@ -64,6 +64,8 @@ router.post('/api/signup', (req, res, next) => {
       }
     ); // close UserModel.findOne()
 }); // close router.post('/signup', ...
+
+
 
 
 

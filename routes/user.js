@@ -6,15 +6,21 @@ const Career  = require('../models/career');
 const User = require('../models/user');
 const { ensureLoggedIn, ensureLoggedOut } = require('connect-ensure-login');
 
-// Returning the profile for the User
-router.get('/userprofile', (req, res, next) => {
-  User.find((err, profileList) => {
-    if (err) {
-      res.json(err);
-      return;
-    }
-    res.json(profileList);
-  });
+// Getting specific user profile
+router.get("/user/:userId", (req, res, next) => {
+  User.findById(req.params.userId)
+    .exec(
+      (err, userFromDb) => {
+        if (err) {
+          console.log("User details error ", err);
+          res.status(500).json({
+            errorMessage: "User details went wrong"
+          });
+          return;
+        }
+        res.status(200).json(userFromDb);
+      }
+    );
 });
 
 

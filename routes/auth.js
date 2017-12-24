@@ -103,6 +103,11 @@ router.post('/api/login', (req, res, next) => {
     authenticateFunction(req, res, next);
 });
 
+router.post('/api/logout', (req, res, next) => {
+    // req.logout() is defined by passport
+    req.logout();
+    res.status(200).json({ message: 'Log out success! 🐫' });
+});
 
 
 

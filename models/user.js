@@ -20,10 +20,14 @@ const userSchema = new Schema(
 			type: Schema.Types.ObjectId,
       required: true
     },
+
     {
       date: Date,
       default: new Date(),
 			required: true
+		}],
+    userid:[{
+      type: Schema.Types.ObjectId,
 		}],
     idtask:[{
       type: Schema.Types.ObjectId,

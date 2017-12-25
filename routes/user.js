@@ -22,7 +22,7 @@ router.get('/getsingleuser/:id', (req, res) => {
     });
 });
 
-/* Edit User */
+/* Edit User profile */
 router.post('/edituser/:id', (req, res) => {
   if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
     res.status(400).json({ message: 'Specified id is not valid' });

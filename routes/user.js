@@ -47,15 +47,4 @@ router.post('/edituser/:id', (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
 module.exports = router;

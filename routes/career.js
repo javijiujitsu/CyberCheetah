@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
+var express   = require('express');
+var router    = express.Router();
+var mongoose  = require('mongoose');
 
-const User = require('../models/user');
-const Career = require('../models/career');
+const User    = require('../models/user');
+const Career  = require('../models/career');
+const Task    = require('../models/task');
 
 /* GET Career listing. */
 router.get('/getcareer', (req, res, next) => {

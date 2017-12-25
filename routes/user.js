@@ -6,29 +6,21 @@ const Career  = require('../models/career');
 const User = require('../models/user');
 const { ensureLoggedIn, ensureLoggedOut } = require('connect-ensure-login');
 
-// getting a specific profile
-router.get("/users/:userId", (req, res, next) => {
-  User.findById(req.params.userId)
-    .exec(
-      (err, userFromDb) => {
-        if (err) {
-          console.log("User details error ", err);
-          res.status(500).json({
-            errorMessage: "User details went wrong"
-          });
-          return;
-        }
-        res.status(200).json(userFromDb);
+// Get user profile
+router.get('/getsingleuser/:id', (req, res) => {
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400).json({ message: 'Specified id is not valid' });
+    return;
+  }
+
+  User.findById(req.params.id, (err, UserProfile) => {
+      if (err) {
+        res.json(err);
+        return;
       }
-    );
+      res.json(UserProfile);
+    });
 });
-
-
-
-
-
-
-
 
 
 

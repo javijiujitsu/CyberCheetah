@@ -18,7 +18,7 @@ I am going to leverage my knowledge as an IT Recruiter to build a web applicatio
 
 ##### updated
 
-Basic MVP is going to be done by January 13th 
+Basic MVP is going to be done by January 13th
 
 ### Created using [Angular2](https://angular.io), [Node.js](https://nodejs.org), [Express](https://expressjs.com/) and [MongoDB](https://www.mongodb.com/).
 

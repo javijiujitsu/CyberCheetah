@@ -6,8 +6,8 @@ const Career  = require('../models/career');
 const User = require('../models/user');
 const { ensureLoggedIn, ensureLoggedOut } = require('connect-ensure-login');
 
-// Getting specific user profile
-router.get("/user/:userId", (req, res, next) => {
+// getting a specific profile
+router.get("/users/:userId", (req, res, next) => {
   User.findById(req.params.userId)
     .exec(
       (err, userFromDb) => {
@@ -28,9 +28,6 @@ router.get("/user/:userId", (req, res, next) => {
 
 
 
-
-
-module.exports = router;
 
 
 

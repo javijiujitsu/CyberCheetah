@@ -43,14 +43,21 @@ router.post('/createcareer', (req, res, next) => {
   });
 });
 
-/* GET a single Career. */
+/* GET a single Career. Generate a task with a .populate */
 router.get('/getsinglecareer/:id', (req, res) => {
+  /*Task.find()*/
+
   if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
     res.status(400).json({ message: 'Specified id is not valid' });
     return;
   }
-
   Career.findById(req.params.id, (err, NewCareer) => {
+    Task.find()
+    .populate("name")
+    .populate("description")
+    .populate("estimatedlength")
+    .populate("resource")
+    .populate("created_")
       if (err) {
         res.json(err);
         return;

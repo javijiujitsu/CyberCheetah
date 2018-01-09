@@ -63,7 +63,7 @@ app.use(passport.session());
 
 // Route calls
 app.use('/', index);
-app.use('/api/career', career);
+app.use('/career', career);
 app.use('/auth',auth);
 app.use('/task',task);
 app.use('/user',user);

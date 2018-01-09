@@ -51,23 +51,17 @@ router.get('/getsinglecareer/:id', (req, res) => {
     res.status(400).json({ message: 'Specified id is not valid' });
     return;
   }
-  Career.findById(req.params.id, (err, NewCareer) => {
-    Task.find()
-    .populate("name")
-    .populate("description")
-    .populate("estimatedlength")
-    .populate("resource")
-    .populate("created_")
-      if (err) {
-        res.json(err);
-        return;
-      }
-
-      res.json(NewCareer);
-    });
+  Career
+  .findById(req.params.id)
+  .populate('idtask')
+  .exec((err, task) => {
+    if (err) {
+      res.json(err);
+      return;
+    }
+    res.json(task);
+  });
 });
-
-/* Edti Career */
 
 router.put('/editcareer/:id', (req, res) => {
   if(!mongoose.Types.ObjectId.isValid(req.params.id)) {

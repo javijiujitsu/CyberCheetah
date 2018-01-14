@@ -1,47 +1,48 @@
-const express   = require('express');
-const bcrypt    = require('bcrypt');
+const express = require('express');
+const bcrypt = require('bcrypt');
 const passport = require('passport');
 
-var router = express.Router();
-var mongoose = require('mongoose');
 
-const User = require('../models/user');
-const { ensureLoggedIn, ensureLoggedOut } = require('connect-ensure-login');
+const UserModel = require('../models/user');
+
+
+const router = express.Router();
+
 
 router.post('/api/signup', (req, res, next) => {
-    if (!req.body.email || !req.body.password) {
+    if (!req.body.signupEmail || !req.body.signupPassword) {
         // 400 for client errors (user needs to fix something)
-        res.status(400).json({ message: 'Need both email and password' });
+        res.status(400).json({ message: 'Need both email and password ' });
         return;
     }
 
-    User.findOne(
-      { email: req.body.email },
+    UserModel.findOne(
+      { email: req.body.signupEmail },
       (err, userFromDb) => {
           if (err) {
             // 500 for server errors (nothing user can do)
-            res.status(500).json({ message: 'Email check went to shit' });
+            res.status(500).json({ message: 'Email check went to ' });
             return;
           }
 
           if (userFromDb) {
             // 400 for client errors (user needs to fix something)
-            res.status(400).json({ message: 'Email already exists' });
+            res.status(400).json({ message: 'Email already exists ' });
             return;
           }
 
           const salt = bcrypt.genSaltSync(10);
-          const scrambledPassword = bcrypt.hashSync(req.body.password, salt);
+          const scrambledPassword = bcrypt.hashSync(req.body.signupPassword, salt);
 
-          const theUser = new User ({
-            username: req.body.username,
-            email: req.body.email,
-            password: scrambledPassword
+          const theUser = new UserModel({
+            fullName: req.body.signupFullName,
+            email: req.body.signupEmail,
+            encryptedPassword: scrambledPassword
           });
 
           theUser.save((err) => {
               if (err) {
-                res.status(500).json({ message: 'User save went to shit' });
+                res.status(500).json({ message: 'User save went to ' });
                 return;
               }
 
@@ -49,13 +50,13 @@ router.post('/api/signup', (req, res, next) => {
               // (req.login() is defined by passport)
               req.login(theUser, (err) => {
                   if (err) {
-                    res.status(500).json({ message: 'Login went to shit' });
+                    res.status(500).json({ message: 'Login went to ' });
                     return;
                   }
 
                   // Clear the encryptedPassword before sending
                   // (not from the database, just from the object)
-                  theUser.password = undefined;
+                  theUser.encryptedPassword = undefined;
 
                   // Send the user's information to the frontend
                   res.status(200).json(theUser);
@@ -73,7 +74,7 @@ router.post('/api/login', (req, res, next) => {
       passport.authenticate('local', (err, theUser, extraInfo) => {
           // Errors prevented us from deciding if login was a success or failure
           if (err) {
-            res.status(500).json({ message: 'Unknown login error' });
+            res.status(500).json({ message: 'Unknown login error ' });
             return;
           }
 
@@ -87,7 +88,7 @@ router.post('/api/login', (req, res, next) => {
           // Login successful, save them in the session.
           req.login(theUser, (err) => {
               if (err) {
-                res.status(500).json({ message: 'Session save error' });
+                res.status(500).json({ message: 'Session save error ' });
                 return;
               }
 
@@ -103,15 +104,17 @@ router.post('/api/login', (req, res, next) => {
     authenticateFunction(req, res, next);
 });
 
+
 router.post('/api/logout', (req, res, next) => {
     // req.logout() is defined by passport
     req.logout();
     res.status(200).json({ message: 'Log out success!' });
 });
 
+
 router.get('/api/checklogin', (req, res, next) => {
     if (!req.user) {
-      res.status(401).json({ message: 'Nobody logged in' });
+      res.status(401).json({ message: 'Nobody logged in. ' });
       return;
     }
 
@@ -121,7 +124,6 @@ router.get('/api/checklogin', (req, res, next) => {
 
     res.status(200).json(req.user);
 });
-
 
 
 module.exports = router;

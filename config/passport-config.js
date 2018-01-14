@@ -1,8 +1,10 @@
-const passport      = require('passport');
+const passport = require('passport');
+const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
-const bcrypt        = require('bcrypt');
 
-const User          = require('../models/user');
+
+const UserModel = require('../models/user');
+
 
 // Save the user's ID in the bowl (called when user logs in)
 passport.serializeUser((userFromDb, next) => {
@@ -12,7 +14,7 @@ passport.serializeUser((userFromDb, next) => {
 
 // Retrieve the user's info from the DB with the ID we got from the bowl
 passport.deserializeUser((idFromBowl, next) => {
-    User.findById(
+    UserModel.findById(
       idFromBowl,
       (err, userFromDb) => {
           if (err) {
@@ -29,12 +31,12 @@ passport.deserializeUser((idFromBowl, next) => {
 // email & password login strategy
 passport.use(new LocalStrategy(
   {
-    username: 'blahEmail',    // sent through AJAX from Angular
-    password: 'blahPassword'  // sent through AJAX from Angular
+    usernameField: 'blahEmail',    // sent through AJAX from Angular
+    passwordField: 'blahPassword'  // sent through AJAX from Angular
   },
   (theEmail, thePassword, next) => {
 
-      User.findOne(
+      UserModel.findOne(
         { email: theEmail },
         (err, userFromDb) => {
             if (err) {
@@ -43,18 +45,18 @@ passport.use(new LocalStrategy(
             }
 
             if (userFromDb === null) {
-              next(null, false, { message: 'Incorrect email' });
+              next(null, false, { message: 'Incorrect email 💩' });
               return;
             }
 
             if (bcrypt.compareSync(thePassword, userFromDb.encryptedPassword) === false) {
-              next(null, false, { message: 'Incorrect password' });
+              next(null, false, { message: 'Incorrect password 💩' });
               return;
             }
 
             next(null, userFromDb);
         }
-      ); // close User.findOne()
+      ); // close UserModel.findOne()
 
   } // close (theEmail, thePassword, next) => {
 ));

@@ -4,18 +4,27 @@ const Schema = mongoose.Schema;
 
 const careerSchema = new Schema(
 	{
-		name:{type: String, required: [true, "name required."] },
-		description:{ type: String, },
-		universities:{ type: String },
-    certification:{ type: String,},
-    resource:{ type: String,},
-    idtask:[{  type: Schema.Types.ObjectId, ref: 'Task'}],
+		name:{type: String,
+		required: true
 	},
-	{
-    timestamps: { createdAt: "created_at", updatedAt: "updated_at" }
+    certification:{
+			type: String,
+      required: true
+		},
+    resource:{
+			type: String
+		},
+		user: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'User' // "ref" is the string name of a model that the ID refers to
+	},            // you NEED "ref" to use "populate()"
+	picture: { type: String }
+},
+{
+	timestamps: true
 }
 );
-
 const CareerModel = mongoose.model("Career", careerSchema);
 
 module.exports = CareerModel;

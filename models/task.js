@@ -5,17 +5,16 @@ const Schema = mongoose.Schema;
 const taskSchema = new Schema(
 	{
 		name:{
-			type: String,
-			required: [true, "name required."]
+			type: String
 		},
 		description:{
-			type: String,
+			type: String
 		},
 		estimatedlength:{
-			type: Number,
+			type: Number
 		},
     resource:{
-			type: String,
+			type: String
 		},
 	},
 	{

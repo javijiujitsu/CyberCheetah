@@ -1,113 +1,117 @@
-var express   = require('express');
-var router    = express.Router();
-var mongoose  = require('mongoose');
+const express = require('express');
+const multer = require('multer');
+const mongoose   = require('mongoose');
 
-const User    = require('../models/user');
-const Career  = require('../models/career');
-const Task    = require('../models/task');
+const CareerModel = require('../models/career');
 
-/* GET Career listing. */
-router.get('/getcareer', (req, res, next) => {
-  Career.find((err, careerList) => {
-    if (err) {
-      res.json(err);
-      return;
-    }
-    res.json(careerList);
-  });
-});
+const router  = express.Router();
 
-/* CREATE a new Career. */
-router.post('/createcareer', (req, res, next) => {
-  const newCareer = new Career({
-    name: req.body.name,
-    description: req.body.description,
-    universities: req.body.universities,
-    certification: req.body.certification,
-    resource: req.body.resource,
-    idtask: req.body.idtask
-    //ID task is being converted to a string
+const myUpload = multer({
+  dest: __dirname + '/../public/uploads/' });
 
-  });
 
-  newCareer.save((err) => {
-    if (err) {
-      res.json(err);
-      return;
-    }
+router.post('/api/careers',
+myUpload.single('careerPicture'),
+(req, res, next) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Log in to make a career' });
+    return;
+  }
 
-    res.json({
-      message: 'New Career created!',
-      id: newCareer._id
+    const theCareer = new CareerModel ({
+      name: req.body.careerName,
+      certification: req.body.careerCertification,
+      resource: req.body.careerResource,
+      user: req.user._id
     });
-  });
-});
 
-/* GET a single Career. Generate a task with a .populate */
-router.get('/getsinglecareer/:id', (req, res) => {
-  /*Task.find()*/
-
-  if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    res.status(400).json({ message: 'Specified id is not valid' });
-    return;
-  }
-  Career
-  .findById(req.params.id)
-  .populate('idtask')
-  .exec((err, task) => {
-    if (err) {
-      res.json(err);
-      return;
-    }
-    res.json(task);
-  });
-});
-
-router.put('/editcareer/:id', (req, res) => {
-  if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    res.status(400).json({ message: 'Specified id is not valid' });
-    return;
-  }
-
-  const updates = {
-    name: req.body.name,
-    description: req.body.description,
-    universities: req.body.universities,
-    certification: req.body.certification,
-    resource: req.body.resource,
-    idtask: req.body.idtask
-  };
-
-  Career.findByIdAndUpdate(req.params.id, updates, (err) => {
-    if (err) {
-      res.json(err);
-      return;
+    if (req.file) {
+      theCareer.picture = '/uploads/' + req.file.filename;
     }
 
-    res.json({
-      message: 'Career updated successfully'
+    theCareer.save((err) => {
+      // Unknow error from the database
+      if (err && theCareer.errors === undefined) {
+        res.status(500).json({ message: 'Career did not save' });
+        return;
+      }
+
+      // // Validation error
+      // if (err && theTravelPost.errors) {
+      //   res.status(400).json({
+      //     titleError: theTravelPost.error.title,
+      //     descriptionError: theTravelPost.error.description
+      //   });
+      //   return;
+      // }
+
+      req.user.encryptedPassword = undefined;
+      theCareer.user = req.user;
+
+      res.status(200).json(theCareer);
     });
-  });
 });
 
-/* DELETE a career. */
-router.delete('/deletecareer/:id', (req, res) => {
+// routes to Edit careers
+router.get('/api/careers', (req, res, next) => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Log in to see Careers.' });
+    return;
+  }
+
+  CareerModel
+    .find()
+
+    // Retrives all the info of the owners
+    .populate('user', { encryptedPassword: 0 })
+
+    .exec((err, allTheCareers) => {
+      if (err) {
+        res.status(500).json({ message: 'Failed to edit Careers' });
+        return;
+      }
+      console.log(allTheCareers);
+      res.status(200).json(allTheCareers);
+    });
+});
+
+
+// // Find and Update record
+// router.post('/:id/edit', ensureLoggedIn('/login'), (req, res, next) => {
+//   const updates = {
+//     title: req.body.title,
+//     description: req.body.description,
+//   };
+//
+//   TravelPost.findByIdAndUpdate(req.params.id, updates, (err, post) => {
+//     if (err) {
+//       return res.render('post/edit', {
+//         post,
+//         errors: post.errors
+//       });
+//     }
+//     if (!post) {
+//       return next(new Error('404'));
+//     }
+//     return res.redirect(`/`);
+//   });
+// });
+router.delete('/api/careers/:id', (req, res) => {
   if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
     res.status(400).json({ message: 'Specified id is not valid' });
     return;
   }
 
-  Career.remove({ _id: req.params.id }, (err) => {
+  CareerModel.remove({ _id: req.params.id }, (err) => {
     if (err) {
       res.json(err);
       return;
     }
 
     return res.json({
-      message: 'Career has been removed!'
+      message: 'Career has been deleted!'
     });
-  });
+  })
 });
-
 
 module.exports = router;
